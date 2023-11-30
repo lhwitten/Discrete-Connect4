@@ -37,7 +37,7 @@ class ConnectState:
 
         temp_row = row
 
-        while temp_row + 1 < GameSetup.ROWS and self.board[temp_rows + 1][col] == player:
+        while temp_row + 1 < GameSetup.ROWS and self.board[temp_row + 1][col] == player:
             consecutive += 1
             temp_row += 1
         
@@ -47,7 +47,9 @@ class ConnectState:
             temp_row -= 1
         
         if consecutive >= 4:
+            print("Horizontal")
             return True
+
 
 
         # Check vertical
@@ -65,25 +67,73 @@ class ConnectState:
             temp_col -= 1
         
         if consecutive >= 4:
+            print("Vertical")
             return True
         
-    
+        
+        # Check diagonal
+        
+        consecutive = 1
+        temp_row = row
+        temp_col = col
+        
+        while temp_row + 1 < GameSetup.ROWS and temp_col+1 < GameSetup.COLS and self.board[temp_row+1][temp_col+1] == player:
+            consecutive += 1
+            temp_row +=1
+            temp_col+=1
+            
+        temp_row = row
+        temp_col = col
+        
+        while temp_row - 1 >= 0 and temp_col - 1 >= 0 and self.board[temp_row-1][temp_col-1] == player:
+            consecutive +=1
+            temp_row -=1
+            temp_col-=1
+        
+        if consecutive >=4:
+            print("Diagonal")
+            return True
+        
+        
+        # Check antidiagonal
+        
+        consecutive = 1
+        temp_row = row
+        temp_col = col
+        
+        while temp_row+1 < GameSetup.ROWS and temp_col-1 >= 0 and self.board[temp_row+1][temp_col-1] == player:
+            consecutive +=1
+            temp_row +=1
+            temp_col -=1
+            
+        while temp_row-1 >=0 and temp_col+1 < GameSetup.COLS and self.board[temp_row-1][temp_col+1] == player:
+            consecutive +=1
+            temp_row-=1
+            temp_col+=1
+            
+        if consecutive >= 4:
+            print(f"Anti Diagonal and Consecutive: {consecutive}")
+            return True
+        
+        return False
+        
     def game_over(self):
         return self.check_win() or len(self.get_legal_moves()) == 0
     
     def get_outcome(self):
-        if len(self.get-legal_moves()) == 0 and self.check_win() == 0:
+        if len(self.get_legal_moves()) == 0 and self.check_win() == 0:
             return GameSetup.OUTCOMES['draw']
         
         return GameSetup.OUTCOMES['one'] if self.check_win() == GameSetup.PLAYERS['one'] else GameSetup.PLAYERS['two']
     
     def print(self):
-        print('======================')
+        print('================================')
+        print("  0   1   2   3   4   5   6")
 
         for row in range(GameSetup.ROWS):
-            FOR COL IN RANGE(GameSetup.COLS):
-            print("| {} ".format("X" if self.board[row][col] == 1 else "0" if self.board[row][col] == 2 else " "), end = "")
+            for col in range(GameSetup.COLS):
+                print("| {} ".format("X" if self.board[row][col] == 1 else "0" if self.board[row][col] == 2 else " "), end = "")
             print("|")
         
-        print('======================')
+        print('================================')
         

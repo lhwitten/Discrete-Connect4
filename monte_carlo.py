@@ -5,6 +5,7 @@ import math
 import time
 import random
 from copy import deepcopy
+from connect_game import * 
 
 class Node:
 
@@ -13,20 +14,27 @@ class Node:
 
     exploration_value = 2
 
-    def __init__(self,game_state,parent):
-        self.game_state = game_state        # matrix
+    def __init__(self,move,parent):
+        self.move = move        # matrix
+        self.parent = parent
         self.children = {}
         self.total_played = 0     # N
         self.total_won = 0      # Q
-        self.UCB = (self.total_won / self.total_played) + self.exploration_value * math.sqrt(math.ln(self.total_played)/self.total_won)
+        self.outcome = GameSetup.PLAYERS["none"]
+        # self.UCB = (self.total_won / self.total_played) + self.exploration_value * math.sqrt(math.ln(self.total_played)/self.total_won)
 
     
     def add_children(self,children:dict):
         # Include all possible unexplored children connected to current node
         for child in children:
-            self.children[child.game_state] = child 
-    def calculate_UCB():
-            pass
+            self.children[child.move] = child 
+            
+    def calculate_UCB(self,explore: float=GameSetup.EXPLORATION):
+        if self.total_played == 0: 
+            return 0 if explore == 0 else GameSetup.INF
+        else:
+            # return self.total_won/self.total_played + explore* math.sqrt(math.ln(self.total_played)/self.total_won) 
+            return self.total_won/self.total_played+explore*math.sqrt(math.log(self.parent.total_played)/self.total_played)
     
 
     #def monte_carlo_search()
@@ -48,8 +56,8 @@ class MonteCarlo:
 
         while len(node.children) != 0:
             children = node.children.values()
-            max_value = max(children, key=lambda n: n.value()).value()
-            max_nodes = [n for n in children if n.value() == max_value]
+            max_value = max(children, key=lambda n: n.calculate_UCB()).calculate_UCB()
+            max_nodes = [n for n in children if n.calculate_UCB() == max_value]
 
             node = random.choice(max_nodes)
             state.move(node.move)
@@ -86,9 +94,9 @@ class MonteCarlo:
 
         while node is not None:
             node.total_played +=1
-            node.total_wins += reward
-            node = node.part
-            if outcome == GameMeta.OUTCOMES['draw']:
+            node.total_won += reward
+            node = node.parent
+            if outcome == GameSetup.OUTCOMES['draw']:
                 reward = 0
             else:
                 reward = 1 - reward
@@ -101,7 +109,7 @@ class MonteCarlo:
         num_rollouts = 0
 
         while time.process_time() - start_time < time_limit:
-            node, state = self.select_node()
+            node, state = self.selection()
             outcome = self.simulation(state)
             self.backpropagation(node, state.to_play, outcome)
             num_rollouts += 1
