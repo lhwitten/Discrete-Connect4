@@ -106,7 +106,7 @@ class ConnectState:
             
         temp_row = row
         temp_col = col
-        
+
         while temp_row-1 >=0 and temp_col+1 < GameSetup.COLS and self.board[temp_row-1][temp_col+1] == player:
             consecutive +=1
             temp_row-=1
