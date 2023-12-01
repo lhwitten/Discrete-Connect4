@@ -1,6 +1,6 @@
 from copy import deepcopy
 import numpy as np
-from game_rules import GameSetup
+from game_setup import GameSetup
 
 class ConnectState:
     def __init__(self):
@@ -44,6 +44,8 @@ class ConnectState:
 
         if consecutive >= 4:
             return True
+        
+        return False
     
     def check_vertical(self, row, col):
         player = self.board[row][col]
@@ -62,6 +64,8 @@ class ConnectState:
         
         if consecutive >= 4:
             return True
+        
+        return False
         
     def check_diagonal(self, row, col):
         player = self.board[row][col] 
@@ -85,6 +89,8 @@ class ConnectState:
         
         if consecutive >=4:
             return True
+        
+        return False
 
     def check_anti_diagonal(self, row, col):
         player = self.board[row][col]
@@ -98,6 +104,9 @@ class ConnectState:
             temp_row +=1
             temp_col -=1
             
+        temp_row = row
+        temp_col = col
+        
         while temp_row-1 >=0 and temp_col+1 < GameSetup.COLS and self.board[temp_row-1][temp_col+1] == player:
             consecutive +=1
             temp_row-=1
@@ -105,6 +114,8 @@ class ConnectState:
             
         if consecutive >= 4:
             return True
+        
+        return False
 
     def check_win_from(self, row, col):
         horizontal = self.check_horizontal(row, col)
