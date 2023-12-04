@@ -11,6 +11,7 @@ class ConnectPygame:
     PERIWINKLE = (204, 229, 255)    #Player 2
     CREAM = (255, 255, 239) #Background
 
+    # FONT = pygame.font.SysFont("monospace", 75)
     SQUARE_SIZE = 100
 
     ROWS = GameSetup.ROWS
@@ -21,7 +22,7 @@ class ConnectPygame:
 
     size = (WIDTH, HEIGHT)
 
-    RADIUS = int(SQUARESIZE/2 - 5)
+    RADIUS = int(SQUARE_SIZE/2 - 5)
 
     screen = pygame.display.set_mode(size)
 
@@ -29,9 +30,9 @@ class ConnectPygame:
         self.board = np.zeros((self.ROWS, self.COLS))
 
     def get_board(self):
-        return board
+        return self.board
 
-    def drop_piece(self,row, col, piece):
+    def drop_piece(self, row, col, piece):
         self.board[row][col] = piece
 
     def print_board(self):
@@ -51,5 +52,31 @@ class ConnectPygame:
                     pygame.draw.circle(self.screen, self.PERIWINKLE , (int(c*self.SQUARE_SIZE+self.SQUARE_SIZE/2),self.HEIGHT-int(r*self.SQUARE_SIZE+self.SQUARE_SIZE/2)),self.RADIUS)
             pygame.display.update()
 
-                        
+
+    def check_win(self, piece):
+        # Check horizontal locations for win
+        for c in range(int(self.COLS) - 3):
+            for r in range(int(self.ROWS)):
+                if self.board[r][c] == piece and self.board[r][c+1] == piece and self.board[r][c+2] == piece and self.board[r][c+3] == piece:
+                    return True
+    
+        # Check vertical locations for win
+        for c in range(int(self.COLS)):
+            for r in range(int(self.ROWS) -3):
+                if self.board[r][c] == piece and self.board[r+1][c] == piece and self.board[r+2][c] == piece and self.board[r+3][c] == piece:
+                    return True
+    
+        # Check positively sloped diaganols
+        for c in range(int(self.COLS)-3):
+            for r in range(int(self.ROWS)-3):
+                if self.board[r][c] == piece and self.board[r+1][c+1] == piece and self.board[r+2][c+2] == piece and self.board[r+3][c+3] == piece:
+                    return True
+    
+        # Check negatively sloped diaganols
+        for c in range(int(self.COLS)-3):
+            for r in range(3, int(self.ROWS)):
+                if self.board[r][c] == piece and self.board[r-1][c+1] == piece and self.board[r-2][c+2] == piece and self.board[r-3][c+3] == piece:
+                    return True
+
+                            
 
