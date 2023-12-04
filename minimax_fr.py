@@ -83,7 +83,7 @@ def score_position(board, player):
     return score
 
 def is_valid_move(board, col):
-    return board[0][col] == 0
+    return board[5][col] == 0
 
 def get_valid_locations(board):
     valid_locations = []
@@ -104,11 +104,13 @@ def minimax(board, depth, is_maximizing,ai_player):
         opponent = 1
 
     if depth ==0 or is_terminal:
+        print(len(get_valid_locations(board)))
         if is_terminal:
+            
             if winning_move(board, ai_player):
-                return (None,-1000000000000000)
+                return (None,1000000000000000)
             elif winning_move(board, opponent):
-                return (None,10000000000000)
+                return (None,-10000000000000)
             else:
                 return(None,0)
         else:
@@ -123,7 +125,7 @@ def minimax(board, depth, is_maximizing,ai_player):
             row = get_next_open_row(board,col)
             temp_board = board.copy()
             drop_piece(temp_board,row,col,ai_player)
-            new_score = minimax(temp_board,depth-1,False)[1]
+            new_score = minimax(temp_board,depth-1,False, ai_player)[1]
             #set the score to the best score out of the seen columns
             if new_score > value:
                 value = new_score
@@ -139,7 +141,7 @@ def minimax(board, depth, is_maximizing,ai_player):
             row = get_next_open_row(board,col)
             temp_board = board.copy()
             drop_piece(temp_board,row,col,opponent)
-            new_score = minimax(temp_board,depth-1,True)[1]
+            new_score = minimax(temp_board,depth-1,True,ai_player)[1]
             
             #this player wants to minimize the score of the AI player
             if new_score < value:
@@ -284,12 +286,11 @@ while not game_over:
 
             # # Ask for Player 2 Input
             else:               
-                posx = event.pos[0]
-                col = int(math.floor(posx/SQUARESIZE))
+                #posx = event.pos[0]
+                #col = int(math.floor(posx/SQUARESIZE))
 
 
-                col, value = minimax(board,4,True,2)
- 
+                col, value = minimax(board,3,False,2)
                 if is_valid_location(board, col):
                     row = get_next_open_row(board, col)
                     drop_piece(board, row, col, 2)
