@@ -1,6 +1,6 @@
 from copy import deepcopy
 import numpy as np
-from game_rules import GameSetup
+from game_setup import GameSetup
 
 class ConnectState:
     def __init__(self):

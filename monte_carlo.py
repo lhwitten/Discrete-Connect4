@@ -1,6 +1,6 @@
-# Pseudocode for main function for the Monte Carlo Tree Search
-
-# Set root node to the current game state
+"""
+Implementation of MCTS for Connect 4 game.
+"""
 import math
 import time
 import random
@@ -8,11 +8,17 @@ from copy import deepcopy
 from connect_game import * 
 
 class Node:
+    """
+    Creates a node that represents a game state.
+
+    Attributes  :
+         _description_
+    """
 
     # Upper Confidence Bound
     # Q/N * exploration value * square root(log(parent node)/current node)
 
-    exploration_value = 2
+    # exploration_value = 2
 
     def __init__(self,move,parent):
         self.move = move        # matrix
