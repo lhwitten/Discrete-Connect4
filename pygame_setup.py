@@ -11,7 +11,6 @@ class ConnectPygame:
     PERIWINKLE = (204, 229, 255)    #Player 2
     CREAM = (255, 255, 239) #Background
 
-    # FONT = pygame.font.SysFont("monospace", 75)
     SQUARE_SIZE = 100
 
     ROWS = GameSetup.ROWS
@@ -34,6 +33,14 @@ class ConnectPygame:
 
     def drop_piece(self, row, col, piece):
         self.board[row][col] = piece
+        
+    def is_legal_move(self, col):
+        return self.board[5][col]== 0
+    
+    def next_valid_row(self, col):
+        for r in range(GameSetup.ROWS):
+            if self.board[r][col]==0:
+                return r
 
     def print_board(self):
         print(np.flip(self.board, 0))
@@ -42,7 +49,7 @@ class ConnectPygame:
         for col in range(self.COLS):
             for row in range(self.ROWS):
                 pygame.draw.rect(self.screen, self.BLUE, (col * self.SQUARE_SIZE, row * self.SQUARE_SIZE + self.SQUARE_SIZE, self.SQUARE_SIZE, self.SQUARE_SIZE))
-                pygame.draw.circle(self.screen, self.CREAM, (int(col * self.SQUARE_SIZE + self.SQUARE_SIZE / 2), int(row * self.SQUARE_SIZE + self.SQUARE_SIZE + self.SQUARE_SIZE / 2)), RADIUS)
+                pygame.draw.circle(self.screen, self.CREAM, (int(col * self.SQUARE_SIZE + self.SQUARE_SIZE / 2), int(row * self.SQUARE_SIZE + self.SQUARE_SIZE + self.SQUARE_SIZE / 2)), self.RADIUS)
 
         for c in range(self.COLS):
             for r in range(self.ROWS):
