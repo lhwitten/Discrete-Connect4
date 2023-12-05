@@ -3,12 +3,11 @@ from connect_game import *
 from monte_carlo import *
 from pygame_setup import ConnectPygame
 import sys
-from connect_board import *
-
 
 
 def main():
-    board = ConnectPygame()
+    board = ConnectState()
+    setup = ConnectPygame()
     
     board.print_board()
 
@@ -17,7 +16,7 @@ def main():
 
     pygame.init()
 
-    board.draw_board()
+    setup.draw_board()
 
     pygame.display.update()
 
@@ -27,25 +26,25 @@ def main():
                 sys.exit()
 
             if event.type == pygame.MOUSEMOTION:
-                pygame.draw.rect(board.screen, board.CREAM, (0, 0, board.WIDTH, board.SQUARE_SIZE))
+                pygame.draw.rect(setup.screen, setup.CREAM, (0, 0, setup.WIDTH, setup.SQUARE_SIZE))
                 pos_x = event.pos[0]
 
                 if turn == 0:
-                    pygame.draw.circle(board.screen, board.GREEN, (pos_x, int(board.SQUARE_SIZE / 2)), board.RADIUS)
+                    pygame.draw.circle(setup.screen, setup.GREEN, (pos_x, int(setup.SQUARE_SIZE / 2)), setup.RADIUS)
                 
                 else:
-                    pygame.draw.circle(board.screen, board.PERIWINKLE, (pos_x, int(board.SQUARE_SIZE / 2)), board.RADIUS)
+                    pygame.draw.circle(setup.screen, setup.PERIWINKLE, (pos_x, int(setup.SQUARE_SIZE / 2)), setup.RADIUS)
             pygame.display.update()
         
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pygame.draw.rect(board.screen, board.CREAM, (0, 0, board.WIDTH, board.SQUARE_SIZE))
+                pygame.draw.rect(setup.screen, setup.CREAM, (0, 0, setup.WIDTH, setup.SQUARE_SIZE))
 
                 if turn == 0:
                     pos_x = event.pos[0]
-                    col = int(math.floor(pos_x / board.SQUARE_SIZE))
+                    col = int(math.floor(pos_x / setup.SQUARE_SIZE))
 
-                    if is_legal_move(board, col):
-                        row = next_valid_row(board, col)
+                    if board.is_legal_move(board, col):
+                        row = board.next_valid_row(board, col)
                         board.drop_piece(board, row, col, 1)
 
                     if board.check_win(1):
@@ -55,10 +54,10 @@ def main():
 
                 else:
                     pos_x = event.pos[0]
-                    col = int(math.floor(pos_x / board.SQUARE_SIZE))
+                    col = int(math.floor(pos_x / setup.SQUARE_SIZE))
 
-                    if is_legal_move(board, col):
-                        row = next_valid_row(board, col)
+                    if board.is_legal_move(board, col):
+                        row = board.next_valid_row(board, col)
                         board.drop_piece(board, row, col, 2)
 
                     if board.check_win(2):
@@ -67,7 +66,7 @@ def main():
                         game_over = True
                 
                 board.print_board()
-                board.draw_board()
+                setup.draw_board()
 
                 turn += 1
                 turn = turn % 2

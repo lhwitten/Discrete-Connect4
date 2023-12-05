@@ -25,7 +25,7 @@ def play():
         
         print("Thinking...")
         
-        monte_carlo.search(7)
+        monte_carlo.search(2)
         num_rollouts, run_time = monte_carlo.statistics()
         
         print(f"Statistics: {num_rollouts} rollouts in {run_time} seconds")
@@ -43,5 +43,5 @@ def play():
             break
         
 
-if __name__ == "__main__":
-    play()
+# if __name__ == "__main__":
+#     play()
