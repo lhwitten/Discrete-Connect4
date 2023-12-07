@@ -7,6 +7,8 @@ import math
 
 ################################ ALL MINIMAX HERE
 
+DEPTH = 3
+
 def evaluate_window(window, player):
     score = 0
     opponent_piece = 2
@@ -272,7 +274,9 @@ while not game_over:
             # Ask for Player 1 Input
             if turn == 0:
                 posx = event.pos[0]
-                col = int(math.floor(posx/SQUARESIZE))
+                #col = int(math.floor(posx/SQUARESIZE))
+
+                col, value = minimax(board,DEPTH,False,2)
  
                 if is_valid_location(board, col):
                     row = get_next_open_row(board, col)
@@ -287,10 +291,10 @@ while not game_over:
             # # Ask for Player 2 Input
             else:               
                 #posx = event.pos[0]
-                #col = int(math.floor(posx/SQUARESIZE))
+                col = int(math.floor(posx/SQUARESIZE))
 
 
-                col, value = minimax(board,3,False,2)
+                #col, value = minimax(board,DEPTH,False,2)
                 if is_valid_location(board, col):
                     row = get_next_open_row(board, col)
                     drop_piece(board, row, col, 2)
