@@ -17,18 +17,18 @@ def evaluate_window(window, player):
     
     if window.count(player) == 4:
         score += 100
-    if window.count(player) == 3 and window.count(' ') == 1:
+    if window.count(player) == 3 and window.count(0) == 1:
         score += 5
-    if window.count(player) == 2 and window.count(' ') == 2:
+    if window.count(player) == 2 and window.count(0) == 2:
         score += 2
 
-    if window.count(opponent_piece) == 3 and window.count(' ') == 1:
-        score -= 10
-    if window.count(opponent_piece) == 2 and window.count(' ') == 2:
+    if window.count(opponent_piece) == 3 and window.count(0) == 1:
+        score -= 4
+    """if window.count(opponent_piece) == 2 and window.count(0) == 2:
         score -= 2
 
-    if window.count(player) == 3 and window.count(' ') == 1:
-        score += 50  # Give a higher score for a winning move
+    if window.count(player) == 3 and window.count(0) == 1:
+        score += 50  # Give a higher score for a winning move"""
     
     return score
 
@@ -292,6 +292,8 @@ while not game_over:
             else:               
                 #posx = event.pos[0]
                 col = int(math.floor(posx/SQUARESIZE))
+
+                print(board)
 
 
                 #col, value = minimax(board,DEPTH,False,2)
