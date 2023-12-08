@@ -50,6 +50,21 @@ class ConnectState:
         self.height[col] -= 1
         self.to_play = GameSetup.PLAYERS['two'] if self.to_play == GameSetup.PLAYERS['one'] else GameSetup.PLAYERS['one']
         
+    def move_pygame(self,col):
+        """
+        Make a move in the specified column. The column will be updated with
+        the player's mark, and then the height of the column will be updated
+        accordingly.
+
+        Args:
+            col: an integer representing a column on the board.
+        """
+        self.board[self.height[GameSetup.ROWS-col]][col] = self.to_play
+        self.last_played = [self.height[col], col]
+        self.height[col] -= 1
+        self.to_play = GameSetup.PLAYERS['two'] if self.to_play == GameSetup.PLAYERS['one'] else GameSetup.PLAYERS['one']
+        
+        
     def get_legal_moves(self):
         """
         Get the legal moves that could be made. A legal move is defined as a 
@@ -178,14 +193,42 @@ class ConnectState:
             for row in range(GameSetup.ROWS):
                 pygame.draw.rect(ConnectPygame.screen, ConnectPygame.BLUE, (col * ConnectPygame.SQUARE_SIZE, row * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE, ConnectPygame.SQUARE_SIZE, ConnectPygame.SQUARE_SIZE))
                 pygame.draw.circle(ConnectPygame.screen, ConnectPygame.CREAM, (int(col * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2), int(row * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2)), ConnectPygame.RADIUS)
-
+                
         for c in range(GameSetup.COLS):
             for r in range(GameSetup.ROWS):
                 if self.board[r][c] == 1:
-                    pygame.draw.circle(ConnectPygame.screen, ConnectPygame.GREEN, (int(c*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2),ConnectPygame.HEIGHT-int(r*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2)),ConnectPygame.RADIUS)
+                    pygame.draw.circle(ConnectPygame.screen, ConnectPygame.GREEN, (int(c * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2), int((r + 1) * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2)), ConnectPygame.RADIUS)
                 elif self.board[r][c] == 2:
-                    pygame.draw.circle(ConnectPygame.screen, ConnectPygame.PERIWINKLE , (int(c*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2),ConnectPygame.HEIGHT-int(r*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2)),ConnectPygame.RADIUS)
-            pygame.display.update()
+                    pygame.draw.circle(ConnectPygame.screen, ConnectPygame.PERIWINKLE, (int(c * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2), int((r + 1) * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2)), ConnectPygame.RADIUS)
+        
+
+        # for c in range(GameSetup.COLS):
+        #     for r in range(GameSetup.ROWS):
+        #         if self.board[r][c] == 1:
+        #             pygame.draw.circle(ConnectPygame.screen, ConnectPygame.GREEN, (int(c*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2),ConnectPygame.HEIGHT-int(r*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2)),ConnectPygame.RADIUS)
+        #         elif self.board[r][c] == 2:
+        #             pygame.draw.circle(ConnectPygame.screen, ConnectPygame.PERIWINKLE , (int(c*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2),ConnectPygame.HEIGHT-int(r*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2)),ConnectPygame.RADIUS)
+        pygame.display.update()
+    
+    
+    # def draw_board(self):
+    #     """
+    #     Draw the Connect 4 game board with squares, circles, and player pieces.
+    #     """
+    #     for col in range(GameSetup.COLS):
+    #         for row in range(GameSetup.ROWS):
+    #             pygame.draw.rect(ConnectPygame.screen, ConnectPygame.BLUE, (col * ConnectPygame.SQUARE_SIZE, row * ConnectPygame.SQUARE_SIZE, ConnectPygame.SQUARE_SIZE, ConnectPygame.SQUARE_SIZE))
+    #             pygame.draw.circle(ConnectPygame.screen, ConnectPygame.CREAM, (int(col * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2), int(row * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2)), ConnectPygame.RADIUS)
+
+    #     for c in range(GameSetup.COLS):
+    #         for r in range(GameSetup.ROWS):
+    #             if self.board[r][c] == 1:
+    #                 pygame.draw.circle(ConnectPygame.screen, ConnectPygame.GREEN, (int(c * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2), int(r * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2)), ConnectPygame.RADIUS)
+    #             elif self.board[r][c] == 2:
+    #                 pygame.draw.circle(ConnectPygame.screen, ConnectPygame.PERIWINKLE, (int(c * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2), int(r * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2)), ConnectPygame.RADIUS)
+
+    #     pygame.display.update()
+
             
     def print_board(self):
         print(self.board)

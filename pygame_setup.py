@@ -28,5 +28,4 @@ class ConnectPygame:
     WIDTH = GameSetup.COLS * SQUARE_SIZE
     HEIGHT = (GameSetup.ROWS + 1) * SQUARE_SIZE
     size = (WIDTH, HEIGHT)
-    screen = pygame.display.set_mode(size)    
-    
+    screen = pygame.display.set_mode(size) 
