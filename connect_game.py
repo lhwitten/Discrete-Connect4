@@ -162,6 +162,9 @@ class ConnectState:
         pygame.display.update()
         
     def print(self):
+        """
+        Print the visualization of the Connect 4 board.
+        """
         print('================================')
         print("  0   1   2   3   4   5   6")
         for row in range(GameSetup.ROWS):
