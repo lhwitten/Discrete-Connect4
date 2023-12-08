@@ -3,7 +3,9 @@ Implementation of Connect 4 game.
 """
 from copy import deepcopy
 import numpy as np
+import pygame
 from game_setup import GameSetup
+from pygame_setup import ConnectPygame
 
 class ConnectState:
     """
@@ -127,6 +129,67 @@ class ConnectState:
         
         return GameSetup.OUTCOMES['one'] if self.check_win() == GameSetup.PLAYERS['one'] else GameSetup.PLAYERS['two']
     
+#----------------------------------------------------------------------------------
+## These are functions to get Pygame working
+#----------------------------------------------------------------------------------
+    def drop_piece(self, row, col, piece):
+        """
+        Drop a game piece into a specified place. Given the row and column, the
+        specified player piece will be dropped at that index.
+
+        Args:
+            row: an integer representing the row.
+            col: an integer representing the column.
+            piece: an integer representing which player.
+        """
+        self.board[row][col] = piece
+        
+    def is_legal_move(self, col):
+        """
+        Check if a given column is a legal move.
+
+        Args:
+            col: an integer representing the column.
+
+        Returns:
+            True if the column is legal.
+        """
+        return self.board[5][col]== 0
+    
+    def next_valid_row(self, col):
+        """
+        Get the next valid row given a column.
+
+        Args:
+            col: an integer representing the column.
+
+        Returns:
+            r: an integer representing the next valid row.
+        """
+        for r in range(GameSetup.ROWS):
+            if self.board[r][col]==0:
+                return r
+            
+    def draw_board(self):
+        """
+        Draw the Connect 4 game board.
+        """
+        for col in range(GameSetup.COLS):
+            for row in range(GameSetup.ROWS):
+                pygame.draw.rect(ConnectPygame.screen, ConnectPygame.BLUE, (col * ConnectPygame.SQUARE_SIZE, row * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE, ConnectPygame.SQUARE_SIZE, ConnectPygame.SQUARE_SIZE))
+                pygame.draw.circle(ConnectPygame.screen, ConnectPygame.CREAM, (int(col * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2), int(row * ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE + ConnectPygame.SQUARE_SIZE / 2)), ConnectPygame.RADIUS)
+
+        for c in range(GameSetup.COLS):
+            for r in range(GameSetup.ROWS):
+                if self.board[r][c] == 1:
+                    pygame.draw.circle(ConnectPygame.screen, ConnectPygame.GREEN, (int(c*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2),ConnectPygame.HEIGHT-int(r*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2)),ConnectPygame.RADIUS)
+                elif self.board[r][c] == 2:
+                    pygame.draw.circle(ConnectPygame.screen, ConnectPygame.PERIWINKLE , (int(c*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2),ConnectPygame.HEIGHT-int(r*ConnectPygame.SQUARE_SIZE+ConnectPygame.SQUARE_SIZE/2)),ConnectPygame.RADIUS)
+            pygame.display.update()
+            
+    def print_board(self):
+        print(self.board)
+        
     def print(self):
         print('================================')
         print("  0   1   2   3   4   5   6")
