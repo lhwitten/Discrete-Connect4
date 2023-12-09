@@ -4,6 +4,7 @@ import numpy as np
 import pygame
 import sys
 import math
+import random
 
 ################################ ALL MINIMAX HERE
 
@@ -94,62 +95,50 @@ def get_valid_locations(board):
 def is_terminal_node(board):
     return winning_move(board, 1) or winning_move(board, 2) or len(get_valid_locations(board)) == 0
 
-def minimax(board, depth, is_maximizing,ai_player):
-    valid_locations = get_valid_locations(board)
-    is_terminal = is_terminal_node(board)
+def minimax(board, depth, alpha, beta, maximizingPlayer):
+	valid_locations = get_valid_locations(board)
+	is_terminal = is_terminal_node(board)
+	if depth == 0 or is_terminal:
+		if is_terminal:
+			if winning_move(board, 1):
+				return (None, 100000000000000)
+			elif winning_move(board, 2):
+				return (None, -10000000000000)
+			else: # Game is over, no more valid moves
+				return (None, 0)
+		else: # Depth is zero
+			return (None, score_position(board, 1))
+	if maximizingPlayer:
+		value = -math.inf
+		column = random.choice(valid_locations)
+		for col in valid_locations:
+			row = get_next_open_row(board, col)
+			b_copy = board.copy()
+			drop_piece(b_copy, row, col, 1)
+			new_score = minimax(b_copy, depth-1, alpha, beta, False)[1]
+			if new_score > value:
+				value = new_score
+				column = col
+			alpha = max(alpha, value)
+			if alpha >= beta:
+				break
+		return column, value
 
-    opponent = 2
-    if ai_player ==2:
-        opponent = 1
-
-    if depth ==0 or is_terminal:
-        print(len(get_valid_locations(board)))
-        if is_terminal:
-            
-            if winning_move(board, ai_player):
-                return (None,1000000000000000)
-            elif winning_move(board, opponent):
-                return (None,-10000000000000)
-            else:
-                return(None,0)
-        else:
-            return (None, score_position(board,ai_player))
-
-    #what the maximizing player does, what the AI wants  
-    if is_maximizing:
-        value = -1000000000000000
-        column = np.random.choice(valid_locations)
-
-        for col in valid_locations:
-            row = get_next_open_row(board,col)
-            temp_board = board.copy()
-            drop_piece(temp_board,row,col,ai_player)
-            new_score = minimax(temp_board,depth-1,False, ai_player)[1]
-            #set the score to the best score out of the seen columns
-            if new_score > value:
-                value = new_score
-                column = col
-            #alpha beta pruning would go here
-        return column, value
-    #find best move for the minimizer, the player
-    else:
-        value = 100000000000000
-        column = np.random.choice(valid_locations)
-        
-        for col in valid_locations:
-            row = get_next_open_row(board,col)
-            temp_board = board.copy()
-            drop_piece(temp_board,row,col,opponent)
-            new_score = minimax(temp_board,depth-1,True,ai_player)[1]
-            
-            #this player wants to minimize the score of the AI player
-            if new_score < value:
-                value = new_score
-                column = col
-            
-            #alpha beta prining would go here
-        
-        return column,value
+	else: # Minimizing player
+		value = math.inf
+		column = random.choice(valid_locations)
+		for col in valid_locations:
+			row = get_next_open_row(board, col)
+			b_copy = board.copy()
+			drop_piece(b_copy, row, col, 2)
+			new_score = minimax(b_copy, depth-1, alpha, beta, True)[1]
+			if new_score < value:
+				value = new_score
+				column = col
+			beta = min(beta, value)
+			if alpha >= beta:
+				break
+		return column, value
 
 
 
@@ -273,7 +262,7 @@ while not game_over:
                 posx = event.pos[0]
                 #col = int(math.floor(posx/SQUARESIZE))
 
-                col, value = minimax(board,DEPTH,False,2)
+                col, minimax_score = minimax(board, 5, -math.inf, math.inf, True)
  
                 if is_valid_location(board, col):
                     row = get_next_open_row(board, col)
@@ -290,7 +279,7 @@ while not game_over:
                 #posx = event.pos[0]
                 col = int(math.floor(posx/SQUARESIZE))
 
-                print(board)
+                #print(board)
 
 
                 #col, value = minimax(board,DEPTH,False,2)
