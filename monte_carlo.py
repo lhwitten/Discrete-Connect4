@@ -5,13 +5,14 @@ import math
 import time
 import random
 from copy import deepcopy
-from connect_game import * 
+from connect_game import ConnectState
+from game_setup import GameSetup
 
 class Node:
     """
     Creates a node that represents a game state.
 
-    Attributes  :
+    Attributes:
          move: the current game state.
          parent: the parent node of the current node.
          children: a dictionary of the children nodes of the current node.
@@ -27,11 +28,9 @@ class Node:
         self.move = move      
         self.parent = parent
         self.children = {}
-        self.total_played = 0     # N
+        self.total_played = 0   # N
         self.total_won = 0      # Q
         self.outcome = GameSetup.PLAYERS["none"]
-        # self.UCB = (self.total_won / self.total_played) + self.exploration_value * math.sqrt(math.ln(self.total_played)/self.total_won)
-
     
     def add_children(self,children:dict):
         """
@@ -43,7 +42,7 @@ class Node:
         for child in children:
             self.children[child.move] = child 
             
-    def calculate_UCB(self,explore: float=GameSetup.EXPLORATION):
+    def calculate_UCT(self,explore: float=GameSetup.EXPLORATION):
         """
         Calculate the UCB value for a node. This value determines which node to
         visit next using the exploration value, total games played by current
@@ -60,7 +59,6 @@ class Node:
         else:
             return self.total_won/self.total_played+explore*math.sqrt(math.log(self.parent.total_played)/self.total_played)
         
-
 class MonteCarlo:
     """
     Performs the Monte Carlo Tree Search.
@@ -100,8 +98,8 @@ class MonteCarlo:
 
         while len(node.children) != 0:
             children = node.children.values()
-            max_value = max(children, key=lambda n: n.calculate_UCB()).calculate_UCB()
-            max_nodes = [n for n in children if n.calculate_UCB() == max_value]
+            max_value = max(children, key=lambda n: n.calculate_UCT()).calculate_UCT()
+            max_nodes = [n for n in children if n.calculate_UCT() == max_value]
 
             node = random.choice(max_nodes)
             state.move(node.move)
@@ -144,7 +142,6 @@ class MonteCarlo:
         Returns:
             An integer representing the outcome of the game (win, loss, or tie).
         """
-        # Select child node (can be random) and play it out until it reaches final stage of game (keeping in mind legalities of moves)
         while not state.game_over():
             state.move(random.choice(state.get_legal_moves()))
 
