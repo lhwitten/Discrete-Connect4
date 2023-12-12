@@ -3,7 +3,7 @@ Connect 4 game minimax vs. MCTS
 """
 import pygame
 from connect_game import ConnectState
-from monte_carlo import MonteCarlo
+from mcts import MonteCarlo
 from pygame_setup import ConnectPygame
 from game_setup import GameSetup
 import sys
@@ -23,6 +23,7 @@ monte_carlo = MonteCarlo(board)
 #----------------------------------------------------------------------------------
 game_over = False
 turn = 0
+# user_turn = random.choice([0, 1])
 user_turn = 0
 #user_turn = 1
 
@@ -250,11 +251,11 @@ while not game_over:
                     
                 if board.game_over():
                     if user_turn == 0:
-                        label = font.render("Player 1 wins!!", 1, ConnectPygame.GREEN)
+                        label = font.render("Minimax wins!!", 1, ConnectPygame.GREEN)
                         ConnectPygame.screen.blit(label, (40, 10))
                         game_over = True        
                     if user_turn == 1:
-                        label = font.render("Player 2 wins!!", 1, ConnectPygame.PERIWINKLE)
+                        label = font.render("Minimax wins!!", 1, ConnectPygame.PERIWINKLE)
                         ConnectPygame.screen.blit(label, (40, 10))
                         game_over = True        
                           
@@ -277,11 +278,11 @@ while not game_over:
             
             if board.game_over():
                 if user_turn == 0:
-                    label = font.render("Player 2 wins!!", 1, ConnectPygame.PERIWINKLE)
+                    label = font.render("Monte Carlo wins!!", 1, ConnectPygame.PERIWINKLE)
                     ConnectPygame.screen.blit(label, (40, 10))
                     board.draw_board()
                 if user_turn == 1:
-                    label = font.render("Player 1 wins!!", 1, ConnectPygame.GREEN)
+                    label = font.render("Monte Carlo wins!!", 1, ConnectPygame.GREEN)
                     ConnectPygame.screen.blit(label, (40, 10))
                     board.draw_board()
                 game_over = True
