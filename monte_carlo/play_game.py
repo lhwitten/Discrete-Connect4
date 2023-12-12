@@ -24,7 +24,7 @@ turn = 0
 user_turn = random.choice([0, 1])
 
 pygame.init()
-board.display_board()
+board.draw_board()
 pygame.display.set_caption('Connect 4')
 font = pygame.font.SysFont("monospace", 75)
 
@@ -67,7 +67,7 @@ while not game_over:
                         ConnectPygame.screen.blit(label, (40, 10))
                         game_over = True        
                           
-            board.display_board()
+            board.draw_board()
 
 
         if turn != user_turn:
@@ -85,11 +85,11 @@ while not game_over:
                 if user_turn == 0:
                     label = font.render("Player 2 wins!!", 1, ConnectPygame.PERIWINKLE)
                     ConnectPygame.screen.blit(label, (40, 10))
-                    board.display_board()
+                    board.draw_board()
                 if user_turn == 1:
                     label = font.render("Player 1 wins!!", 1, ConnectPygame.GREEN)
                     ConnectPygame.screen.blit(label, (40, 10))
-                    board.display_board()
+                    board.draw_board()
                 game_over = True
 
             if game_over:

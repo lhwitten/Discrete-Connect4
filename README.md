@@ -17,7 +17,7 @@ Please download this repository. These instructions are for Ubuntu 22.04.
 **Make sure you are in the Discrete-Connect4 directory.**
 To run the single player game for Minimax, run the following command:
 ```
-$ python3 minimax/minimax_fr3.py
+$ python3 minimax/play_game.py
 ```
 To run the single player game for MCTS, run the following command:
 ```
