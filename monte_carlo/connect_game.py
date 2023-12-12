@@ -2,10 +2,9 @@
 Implementation of Connect 4 game.
 """
 from copy import deepcopy
-import numpy as np
 import pygame
-from .game_setup import GameSetup
-from .pygame_setup import ConnectPygame
+from game_setup import GameSetup
+from pygame_setup import ConnectPygame
 
 class ConnectState:
     """

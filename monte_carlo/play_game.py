@@ -2,9 +2,9 @@
 Single player Connect 4 game vs. MCTS player.
 """
 import pygame
-from .connect_game import ConnectState
-from .mcts import MonteCarlo
-from .pygame_setup import ConnectPygame
+from connect_game import ConnectState
+from mcts import MonteCarlo
+from pygame_setup import ConnectPygame
 import sys
 import random
 import math

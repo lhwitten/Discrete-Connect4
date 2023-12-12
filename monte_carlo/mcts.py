@@ -5,8 +5,8 @@ import math
 import time
 import random
 from copy import deepcopy
-from .connect_game import ConnectState
-from .game_setup import GameSetup
+from connect_game import ConnectState
+from game_setup import GameSetup
 
 class Node:
     """

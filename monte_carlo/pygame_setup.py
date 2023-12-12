@@ -2,7 +2,7 @@
 Pygame implementation of Connect 4 game.
 """
 import pygame
-from .game_setup import GameSetup
+from game_setup import GameSetup
 
 class ConnectPygame:
     """
